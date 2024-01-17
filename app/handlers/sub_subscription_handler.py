@@ -47,10 +47,11 @@ async def invoice_crypto(message: types.Message, state: FSMContext):
 async def create_subscription(message: types.Message, state: Subscription_card.create_subscription):
     await message.answer("Thanks for your order! You can now start @[MAIN BOT] to start receiving tips")
     add_user(message.from_user.id, round(time.time()+2592000))
+    await state.finish()
 
 
 def register_handlers_subscription(dp: Dispatcher):
     dp.register_message_handler(invoice_card, lambda msg: msg.text == "Card", state="*")
     dp.register_pre_checkout_query_handler(sub_successful_payment, lambda query: True, state=Subscription_card.sub_pre_checkout)
     dp.register_message_handler(invoice_crypto, lambda msg: msg.text == "Crypto", state="*")
-
+    dp.register_message_handler(create_subscription, content_types=ContentTypes.SUCCESSFUL_PAYMENT, state=Subscription_card.create_subscription)
