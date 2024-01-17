@@ -2,6 +2,8 @@ import sqlite3
 from ast import literal_eval
 import time
 
+import datetime
+
 
 
 def create_database():
@@ -45,7 +47,7 @@ def add_user(user_id, unsub_time):
             cur = con.cursor()
             query = (f"""
             UPDATE sub_table
-            SET unsub_time='{old_time+40}'
+            SET unsub_time='{old_time+2592000}'
             WHERE user_id='{user_id}'""")
             cur.execute(query)
 
@@ -82,4 +84,20 @@ def unsub_list(users):
             cur.execute(query)
 
 
+def get_unsub_date(user_id):
+    try:
+        with sqlite3.connect("database/sub_db.sqlite") as con:
+            cur = con.cursor()
+            query = (f"""
+               SELECT unsub_time
+               FROM sub_table
+               WHERE user_id='{user_id}'""")
+            cur.execute(query)
+            data = cur.fetchone()[0]
 
+        dt_object = datetime.datetime.fromtimestamp(data)
+        formatted_date = dt_object.strftime('%Y-%m-%d')
+
+        return formatted_date
+    except:
+        return None

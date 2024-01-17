@@ -38,7 +38,6 @@ async def sub_successful_payment(pre_checkout_query: types.PreCheckoutQuery, sta
 
 
 
-
 async def invoice_crypto(message: types.Message, state: FSMContext):
     pass
 
@@ -46,7 +45,7 @@ async def invoice_crypto(message: types.Message, state: FSMContext):
 
 
 async def create_subscription(message: types.Message, state: Subscription_card.create_subscription):
-    await message.answer("You was successfully subscribed to the bot [SECOND BOT LINK]")
+    await message.answer("Thanks for your order! You can now start @[MAIN BOT] to start receiving tips")
     add_user(message.from_user.id, round(time.time()+2592000))
 
 

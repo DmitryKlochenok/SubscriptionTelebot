@@ -1,20 +1,31 @@
 from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
 from app.config import whitelist
+from database.db_manager import show_expired, get_unsub_date
 
 
 async def cmd_start(message: types.Message, state: FSMContext):
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    unsub_date = get_unsub_date(message.from_user.id)
+    unsub, subbed = show_expired()
+    if message.from_user.id in unsub:
+        await message.answer("""Hello! 
 
-    if message.from_user.id in whitelist:
-        msg_button = types.KeyboardButton("Send message")
-        markup.add(msg_button)
+You are not subscribed to this service 
 
-    await message.answer(text=f"""
-Welcome to the bot! 
+You can get the subscription in @[FIRST BOT]""")
+    elif message.from_user.id in subbed:
+        await message.answer(f"""Hello!
+        
+Your subscription is active till {unsub_date}
 
-Here you will get the tips if subscribed""", reply_markup=markup)
+Enjoy the service!""")
 
+    else:
+        await message.answer("""Hello! 
+
+        You are not subscribed to this service 
+
+        You can get the subscription in @[FIRST BOT]""")
 
 
 def register_handlers_common(dp: Dispatcher):

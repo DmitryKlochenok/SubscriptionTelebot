@@ -28,4 +28,4 @@ async def send_message(message: types.Message, state: Content.send_msg):
 
 
 def register_handlers_content(dp: Dispatcher):
-    dp.register_message_handler(wait_message, lambda msg: msg.text == "Send message", state="*")
+    dp.register_message_handler(wait_message, lambda msg: msg.from_user.id in whitelist, state="*")
