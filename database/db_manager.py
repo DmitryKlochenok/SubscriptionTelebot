@@ -68,8 +68,6 @@ def show_expired():
             unsub.append(user[0])
         else:
             subbed.append(user[0])
-    print("unsub: ", unsub)
-    print("subbed: ", subbed)
     return unsub, subbed
 
 

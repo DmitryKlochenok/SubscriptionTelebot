@@ -11,11 +11,6 @@ from database.db_manager import show_expired, unsub_list
 class Content(StatesGroup):
     send_msg = State()
 
-async def wait_message(message: types.Message, state: FSMContext):
-    if message.from_user.id in whitelist:
-        await message.answer("Enter the message for subscribers: ")
-        await state.set_state(Content.send_msg.state)
-
 async def send_message(message: types.Message, state: Content.send_msg):
     if message.from_user.id in whitelist:
         unsub, subbed = show_expired()
@@ -28,4 +23,4 @@ async def send_message(message: types.Message, state: Content.send_msg):
 
 
 def register_handlers_content(dp: Dispatcher):
-    dp.register_message_handler(wait_message, lambda msg: msg.from_user.id in whitelist, state="*")
+    dp.register_message_handler(send_message, lambda msg: msg.from_user.id in whitelist, state="*")
