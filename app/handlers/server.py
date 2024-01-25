@@ -1,12 +1,12 @@
-import threading
+#! /usr/bin/env python3.6
 
-import asyncio as asyncio
-
-from main_bot import main_main
-from sub_bot import main_sub
-
+"""
+server.py
+Stripe Sample.
+Python 3.6 or newer required.
+"""
+import os
 from flask import Flask, redirect, jsonify, json, request, current_app
-from app.config import DOMAIN
 
 import stripe
 # This is a public sample test API key.
@@ -16,7 +16,9 @@ stripe.api_key = 'sk_test_4eC39HqLyjWDarjtT1zdp7dc'
 
 app = Flask(__name__,
             static_url_path='',
-            static_folder='app/handlers/public')
+            static_folder='public')
+
+YOUR_DOMAIN = 'http://localhost:4242'
 
 @app.route('/', methods=['GET'])
 def get_index():
@@ -38,9 +40,9 @@ def create_checkout_session():
                 },
             ],
             mode='subscription',
-            success_url=DOMAIN +
+            success_url=YOUR_DOMAIN +
             '/success.html?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url=DOMAIN + '/cancel.html',
+            cancel_url=YOUR_DOMAIN + '/cancel.html',
         )
         return redirect(checkout_session.url, code=303)
     except Exception as e:
@@ -56,7 +58,7 @@ def customer_portal():
 
     # This is the URL to which the customer will be redirected after they are
     # done managing their billing with the portal.
-    return_url = DOMAIN
+    return_url = YOUR_DOMAIN
 
     portalSession = stripe.billing_portal.Session.create(
         customer=checkout_session.customer,
@@ -107,28 +109,5 @@ def webhook_received():
     return jsonify({'status': 'success'})
 
 
-
-
-def loop1():
-    asyncio.run(main_main())
-
-def loop2():
-    asyncio.run(main_sub())
-
-def loop3():
+if __name__ == '__main__':
     app.run(port=4242)
-
-# Create threads for each loop
-thread1 = threading.Thread(target=loop1)
-thread2 = threading.Thread(target=loop2)
-thread3 = threading.Thread(target=loop3)
-
-# Start the threads
-thread1.start()
-thread2.start()
-thread3.start()
-
-# Wait for the threads to finish
-thread1.join()
-thread2.join()
-thread3.join()

@@ -1,11 +1,12 @@
 from aiogram import Dispatcher, types
 from aiogram.dispatcher import FSMContext
-
+from aiogram.types import WebAppInfo
+from app.config import DOMAIN
 
 
 async def cmd_start(message: types.Message, state: FSMContext):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    card_button = types.KeyboardButton("Card")
+    card_button = types.KeyboardButton("Card", web_app=WebAppInfo(url=DOMAIN))
     crypto_button = types.KeyboardButton("Crypto")
     markup.add(card_button, crypto_button)
 

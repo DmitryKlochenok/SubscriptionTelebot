@@ -16,19 +16,21 @@ class Subscription_crypto(StatesGroup):
     pass
 
 
+
 async def invoice_card(message: types.Message, state: FSMContext):
-    prices = [types.LabeledPrice(label='Card Subscription', amount=sub_price_card)]
-    await message.bot.send_invoice(
-        message.chat.id,  # chat_id
-        title='Subscription',  # title
-        description=f'Monthly subscription to the tips bot',  # description
-        provider_token=PROVIDER_TOKEN,  # provider_token
-        currency=currency_card,  # currency
-        is_flexible=False,  # True If you need to set up Shipping Fee
-        prices=prices,  # prices
-        start_parameter='sub_bought',
-        payload='sub_payload')  # invoice_payload
-    await state.set_state(Subscription_card.sub_pre_checkout.state)
+    pass
+    # prices = [types.LabeledPrice(label='Card Subscription', amount=sub_price_card)]
+    # await message.bot.send_invoice(
+    #     message.chat.id,  # chat_id
+    #     title='Subscription',  # title
+    #     description=f'Monthly subscription to the tips bot',  # description
+    #     provider_token=PROVIDER_TOKEN,  # provider_token
+    #     currency=currency_card,  # currency
+    #     is_flexible=False,  # True If you need to set up Shipping Fee
+    #     prices=prices,  # prices
+    #     start_parameter='sub_bought',
+    #     payload='sub_payload')  # invoice_payload
+    # await state.set_state(Subscription_card.sub_pre_checkout.state)
 
 
 async def sub_successful_payment(pre_checkout_query: types.PreCheckoutQuery, state: Subscription_card.sub_pre_checkout):
